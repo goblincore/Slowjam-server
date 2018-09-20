@@ -7,9 +7,20 @@ const nofavicon = require('express-no-favicons');
 const youtube = require('./youtube');
 const downloader = require('./downloader');
 const app = express();
+const cors = require('cors');
+const { PORT, CLIENT_ORIGIN } = require('./config');
 
 function listen (port, callback = () => {}) {
   app.use(nofavicon());
+
+  app.use(
+    cors({
+      origin: CLIENT_ORIGIN
+    })
+  );
+
+  // Parse request body
+  app.use(express.json());
 
   app.get('/', (req, res) => {
     const file = path.resolve(__dirname, 'index.html');
@@ -41,6 +52,7 @@ function listen (port, callback = () => {}) {
   });
 
 
+
   app.get('/get/:fileURL', (req,res) => {
     const videoID = req.params.fileURL;
     try{
@@ -52,6 +64,7 @@ function listen (port, callback = () => {}) {
   });
 
   app.get('/search/:query/:page?', (req, res) => {
+    console.log('search rquest');
     const {query, page} = req.params;
     youtube.search({query, page}, (err, data) => {
       if (err) {

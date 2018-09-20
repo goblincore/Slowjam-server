@@ -19,26 +19,23 @@ class YouTube {
 
   getFileURL (id,callback){
  
-    ytdl.getInfo(`https://www.youtube.com/watch?v=${id}`, (err, info) => {
+    ytdl.getInfo(`https://www.youtube.com/watch?v=${id}`,(err, info) => {
       if (err) throw err;
       var audioFormats = ytdl.filterFormats(info.formats,'audioonly');
-      console.log('Formats with only audio: ' + 'AUDIO URL', audioFormats);
+      console.log('Formats with only audio: ', audioFormats);
       let foundItag;
       let counter=0;
       while( audioFormats[counter].itag !== '140'){
-     
         counter++;
       }
       foundItag = audioFormats[counter];
       let url = foundItag.url;
 
       console.log('found url',url);
-    
-     
+
       callback(url);
 
     });
-    
   }
 
 
