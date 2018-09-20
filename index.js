@@ -2,13 +2,13 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const yas = require('../index');
+const yas = require('./src/index');
 const args = require('minimist')(process.argv.slice(2));
 const port = process.env.PORT || 8080;
 
 
 // print ascii art
-var artFile = path.join(__dirname, './ascii-art.txt');
+var artFile = path.join(__dirname, './src/ascii-art.txt');
 var art = fs.readFileSync(artFile, 'utf8');
 console.log(art);
 

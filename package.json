@@ -2,7 +2,7 @@
   "name": "youtube-audio-server",
   "version": "2.1.4",
   "description": "Easily stream and download audio from YouTube.",
-  "main": "src/index.js",
+  "main": "./src/index.js",
   "scripts": {
     "start": "./src/bin.js",
     "test": "standard",
