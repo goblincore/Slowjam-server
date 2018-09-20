@@ -1,72 +1,115 @@
-const fs = require('fs')
-const ytdl = require('ytdl-core')
-const YtNode = require('youtube-node')
-const through2 = require('through2')
-const Ffmpeg = require('fluent-ffmpeg')
+'use strict';
 
-const apiKey = process.env.KEY
-const ytNode = new YtNode()
-ytNode.setKey(apiKey)
+const fs = require('fs');
+const ytdl = require('ytdl-core');
+const YtNode = require('youtube-node');
+const through2 = require('through2');
+const Ffmpeg = require('fluent-ffmpeg');
+
+
+const apiKey = 'AIzaSyDNzYmcCbATvwIgvnme3g_StFZ9a17CkOA';
+const ytNode = new YtNode();
+ytNode.setKey(apiKey);
 
 class YouTube {
   constructor () {
-    this.pageSize = 10
+    this.pageSize = 10;
   }
 
+
+  getFileURL (id,callback){
+ 
+    ytdl.getInfo(`https://www.youtube.com/watch?v=${id}`, (err, info) => {
+      if (err) throw err;
+      var audioFormats = ytdl.filterFormats(info.formats,'audioonly');
+      console.log('Formats with only audio: ' + 'AUDIO URL', audioFormats);
+      let foundItag;
+      let counter=0;
+      while( audioFormats[counter].itag !== '140'){
+     
+        counter++;
+      }
+      foundItag = audioFormats[counter];
+      let url = foundItag.url;
+
+      console.log('found url',url);
+    
+     
+      callback(url);
+
+    });
+    
+  }
+
+
   stream (id, res) {
-    const video = ytdl(id)
-    const ffmpeg = new Ffmpeg(video)
-    const stream = through2()
+    const video = ytdl(id);
+    // ytdl.getInfo('https://www.youtube.com/watch?v=Dst9gZkq1a8', (err, info) => {
+    //   if (err) throw err;
+    //   var audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+    //   console.log('Formats with only audio: ' + 'AUDIO URL',audioFormats[0].url);
+    // });
+
+    // ytdl.getInfo('https://www.youtube.com/watch?v=6OjVJyYE70k',(err,info) => {
+    //   console.log('VIDEO INFO',info);
+    // });
+    const ffmpeg = new Ffmpeg(video);
+    const stream = through2();
 
     try {
       ffmpeg
+        // .seekInput('134.5')
         .format('mp3')
-        .pipe(stream)
+        .seek(180)
+        .pipe(stream);
+   
 
-      return stream
+      return stream;
     } catch (e) {
-      throw e
+      throw e;
     }
   }
 
   download ({id, file = './youtube-audio.mp3'}, callback) {
-    const url = `//youtube.com/watch?v=${id}`
-    const fileWriter = fs.createWriteStream(file)
+    const url = `//youtube.com/watch?v=${id}`;
+    const fileWriter = fs.createWriteStream(file);
 
     try {
-      ytdl(url).pipe(fileWriter)
+      ytdl(url).pipe(fileWriter);
     } catch (e) {
-      throw e
+      throw e;
     }
 
     fileWriter.on('finish', () => {
-      fileWriter.end()
+      fileWriter.end();
 
       if (typeof callback === 'function') {
-        callback(null, {id, file})
+        callback(null, {id, file});
       }
-    })
+    });
 
     fileWriter.on('error', (error) => {
-      fileWriter.end()
+      fileWriter.end();
 
       if (typeof callback === 'function') {
-        callback(error, null)
+        callback(error, null);
       }
-    })
+    });
   }
 
   search ({query, page}, callback) {
     if (page) {
-      ytNode.addParam('pageToken', page)
+      ytNode.addParam('pageToken', page);
     }
 
-    ytNode.search(query, this.pageSize, callback)
+    ytNode.addParam('type','video');
+
+    ytNode.search(query, this.pageSize, callback);
   }
 
   get (id, callback) {
-    ytNode.getById(id, callback)
+    ytNode.getById(id, callback);
   }
 }
 
-module.exports = new YouTube()
+module.exports = new YouTube();
