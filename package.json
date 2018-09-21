@@ -1,7 +1,7 @@
 {
-  "name": "youtube-audio-server",
-  "version": "2.1.4",
-  "description": "Easily stream and download audio from YouTube.",
+  "name": "Slow Jam Audio Server",
+  "version": "0.0.1",
+  "description": "Stream and download audio from YouTube.",
   "main": "./src/index.js",
   "scripts": {
     "start": "./src/bin.js",
@@ -12,16 +12,6 @@
   "bin": {
     "yas": "./src/bin.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codealchemist/youtube-audio-server.git"
-  },
-  "author": "Alberto Miranda",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/codealchemist/youtube-audio-server/issues"
-  },
-  "homepage": "https://github.com/codealchemist/youtube-audio-server#readme",
   "dependencies": {
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",

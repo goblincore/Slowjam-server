@@ -6,7 +6,6 @@ const YtNode = require('youtube-node');
 const through2 = require('through2');
 const Ffmpeg = require('fluent-ffmpeg');
 
-
 const apiKey = 'AIzaSyDNzYmcCbATvwIgvnme3g_StFZ9a17CkOA';
 const ytNode = new YtNode();
 ytNode.setKey(apiKey);
@@ -17,25 +16,22 @@ class YouTube {
   }
 
 
-  getFileURL (id,callback){
- 
-    ytdl.getInfo(`https://www.youtube.com/watch?v=${id}`,(err, info) => {
-      if (err) throw err;
-      var audioFormats = ytdl.filterFormats(info.formats,'audioonly');
-      console.log('Formats with only audio: ', audioFormats);
-      let foundItag;
-      let counter=0;
-      while( audioFormats[counter].itag !== '140'){
-        counter++;
-      }
-      foundItag = audioFormats[counter];
-      let url = foundItag.url;
-
-      console.log('found url',url);
-
-      callback(url);
-
-    });
+  getFileURL (id){
+    return new Promise(function (resolve,reject) {
+      ytdl.getInfo(`https://www.youtube.com/watch?v=${id}`,(err, info) => {
+        if (err) reject (err);
+        let audioFormats = ytdl.filterFormats(info.formats,'audioonly');
+        console.log('Formats with only audio: ', audioFormats);
+        let foundItag;
+        let counter=0;
+        while( audioFormats[counter].itag !== '140'){
+          counter++;
+        }
+        foundItag = audioFormats[counter];
+        let url = { 'fileURL': foundItag.url};
+        resolve(url);
+      });
+    });  
   }
 
 
@@ -95,6 +91,8 @@ class YouTube {
   }
 
   search ({query, page}, callback) {
+  
+   
     if (page) {
       ytNode.addParam('pageToken', page);
     }

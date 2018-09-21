@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const fs = require('fs');
+require('dotenv').config();
 const path = require('path');
 const yas = require('./src/index');
 const args = require('minimist')(process.argv.slice(2));
