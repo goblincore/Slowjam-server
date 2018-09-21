@@ -1,4 +1,4 @@
-const youtube = require('./youtube')
+const youtube = require('./youtube');
 
 class Downloader {
   help () {
@@ -11,40 +11,40 @@ class Downloader {
         yas --id 2zYDMN4h2hY
 
       FILE defaults to ./youtube-audio.mp3 when not set.
-    `
+    `;
   }
 
   handleError (params) {
     if (typeof this.onErrorCallback === 'function') {
-      this.onErrorCallback(params)
+      this.onErrorCallback(params);
     }
   }
 
   download ({id, file = './youtube-audio.mp3'}) {
     youtube.download({id, file}, (err, data) => {
       if (err) {
-        this.handleError({id, file, error: err.message || err})
-        return
+        this.handleError({id, file, error: err.message || err});
+        return;
       }
 
       if (typeof this.onSuccessCallback === 'function') {
-        this.onSuccessCallback({id, file})
+        this.onSuccessCallback({id, file});
       }
-    })
+    });
 
-    return this
+    return this;
   }
 
   onSuccess (callback) {
-    if (typeof callback === 'function') this.onSuccessCallback = callback
-    return this
+    if (typeof callback === 'function') this.onSuccessCallback = callback;
+    return this;
   }
 
   onError (callback) {
-    if (typeof callback === 'function') this.onErrorCallback = callback
-    return this
+    if (typeof callback === 'function') this.onErrorCallback = callback;
+    return this;
   }
 }
 
-const downloader = new Downloader()
-module.exports = downloader
+const downloader = new Downloader();
+module.exports = downloader;
