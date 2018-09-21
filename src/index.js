@@ -27,31 +27,31 @@ function listen (port, callback = () => {}) {
     res.sendFile(file);
   });
 
-  app.get('/:videoId', (req, res) => {
-    const videoId = req.params.videoId;
+  // app.get('/:videoId', (req, res) => {
+  //   const videoId = req.params.videoId;
 
-    try{
-      youtube.getFileURL(videoId, callback => {
-        res.json({'fileURL' : callback});
-      });
-      // console.log('FILE URL GET',fileURL);
+  //   try{
+  //     youtube.getFileURL(videoId, callback => {
+  //       res.json({'fileURL' : callback});
+  //     });
+  //     // console.log('FILE URL GET',fileURL);
      
-    } catch (e){
-      console.error(e);
-      res.sendStatus(500,e);
-    }
+  //   } catch (e){
+  //     console.error(e);
+  //     res.sendStatus(500,e);
+  //   }
 
-    // try {
-    //   youtube.stream(videoId).pipe(res);
-    // } catch (e) {
-    //   console.error(e);
-    //   res.sendStatus(500, e);
-    // }
-  });
+  //   // try {
+  //   //   youtube.stream(videoId).pipe(res);
+  //   // } catch (e) {
+  //   //   console.error(e);
+  //   //   res.sendStatus(500, e);
+  //   // }
+  // });
 
 
   //gets file URL given a Youtube Id
-  app.get('/get/:videoId', (req,res,next) => {
+  app.get('/:videoId', (req,res,next) => {
     const {videoId} = req.params;
     youtube.getFileURL(videoId)
       .then(videoId => res.json(videoId))
