@@ -4,7 +4,10 @@ const fs = require('fs');
 const ytdl = require('ytdl-core');
 const YtNode = require('youtube-node');
 const through2 = require('through2');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const Ffmpeg = require('fluent-ffmpeg');
+Ffmpeg.setFfmpegPath(ffmpegPath);
+
 
 const apiKey = 'AIzaSyDNzYmcCbATvwIgvnme3g_StFZ9a17CkOA';
 const ytNode = new YtNode();
