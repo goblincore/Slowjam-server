@@ -13,6 +13,7 @@
     "yas": "./src/bin.js"
   },
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",

@@ -27,36 +27,39 @@ function listen (port, callback = () => {}) {
     res.sendFile(file);
   });
 
-  // app.get('/:videoId', (req, res) => {
-  //   const videoId = req.params.videoId;
 
-  //   try{
-  //     youtube.getFileURL(videoId, callback => {
-  //       res.json({'fileURL' : callback});
-  //     });
-  //     // console.log('FILE URL GET',fileURL);
+  //gets video file info and then attempts to stream
+  app.get('/:videoId', (req, res) => {
+    const videoId = req.params.videoId;
+
+    try{
+      youtube.getFileURL(videoId, callback => {
+        console.log('callback',callback);
+        res.json({'fileURL' : callback});
+      });
+      // console.log('FILE URL GET',fileURL);
      
-  //   } catch (e){
-  //     console.error(e);
-  //     res.sendStatus(500,e);
-  //   }
+    } catch (e){
+      console.error(e);
+      res.sendStatus(500,e);
+    }
 
-  //   // try {
-  //   //   youtube.stream(videoId).pipe(res);
-  //   // } catch (e) {
-  //   //   console.error(e);
-  //   //   res.sendStatus(500, e);
-  //   // }
-  // });
+    try {
+      youtube.stream(videoId).pipe(res);
+    } catch (e) {
+      console.error(e);
+      res.sendStatus(500, e);
+    }
+  });
 
 
   //gets file URL given a Youtube Id
-  app.get('/:videoId', (req,res,next) => {
-    const {videoId} = req.params;
-    youtube.getFileURL(videoId)
-      .then(videoId => res.json(videoId))
-      .catch(err=>next(err));
-  });
+  // app.get('/:videoId', (req,res,next) => {
+  //   const {videoId} = req.params;
+  //   youtube.getFileURL(videoId)
+  //     .then(videoInfo => res.json(videoInfo))
+  //     .catch(err=>next(err));
+  // });
 
   app.get('/search/:query/:page?', (req, res, next) => {
     console.log('search rquest');

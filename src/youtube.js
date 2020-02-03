@@ -20,20 +20,20 @@ class YouTube {
     return new Promise(function (resolve,reject) {
       ytdl.getInfo(`https://www.youtube.com/watch?v=${id}`,(err, info) => {
         if (err) reject (err);
-        let audioFormats = ytdl.filterFormats(info.formats,'audioonly');
+        let audioFormats = ytdl.filterFormats(info.formats,'audio');
         console.log('Formats with only audio: ', audioFormats);
         let foundItag;
-        let counter=0;
-        while( audioFormats[counter].itag !== '140'){
-          counter++;
+        foundItag = audioFormats.find(obj => obj.itag === 140);
+        if(!foundItag){
+          let otherFormats = ytdl.filterFormats(info.formats,'audioandvideo');
+          foundItag = otherFormats.find(obj => obj.mimeType==='video/mp4');
         }
-        foundItag = audioFormats[counter];
+        console.log('foundItag',foundItag);
         let url = { 'fileURL': foundItag.url};
         resolve(url);
       });
     });  
   }
-
 
   stream (id, res) {
     const video = ytdl(id);
@@ -55,8 +55,6 @@ class YouTube {
         .format('mp3')
         .seek(180)
         .pipe(stream);
-   
-
       return stream;
     } catch (e) {
       throw e;
